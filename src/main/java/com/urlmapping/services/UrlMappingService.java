@@ -4,6 +4,7 @@ package com.urlmapping.services;
 import com.urlmapping.dtos.CreateURLDTO;
 import com.urlmapping.dtos.ResponseURLDTO;
 import com.urlmapping.dtos.Statistics;
+import com.urlmapping.dtos.TopVisitedURLDTO;
 import com.urlmapping.entities.UrlMapping;
 import com.urlmapping.exceptions.AliasAlreadyExistsException;
 import com.urlmapping.exceptions.ShortenedURLNotFoundException;
@@ -12,7 +13,12 @@ import com.urlmapping.repository.UrlMappingRepository;
 import com.urlmapping.utils.URLUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UrlMappingService {
@@ -89,5 +95,6 @@ public class UrlMappingService {
         if (urlWithSameAlias.isPresent())
             throw new AliasAlreadyExistsException(customAlias);
     }
+
 
 }

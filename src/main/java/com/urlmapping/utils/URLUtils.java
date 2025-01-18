@@ -22,9 +22,8 @@ public class URLUtils {
     public static String formatTimeTaken(long startTime, int decimalPlaces) {
         long timeTakenMillis = System.currentTimeMillis() - startTime;
 
-        double timeTakenSeconds = timeTakenMillis / 1000.0;
-
-        return String.format("%."+ decimalPlaces + "f", timeTakenSeconds) + "s";
+        return String.format("%." + decimalPlaces + "f", (double) timeTakenMillis) + "ms";
     }
+
 
 }

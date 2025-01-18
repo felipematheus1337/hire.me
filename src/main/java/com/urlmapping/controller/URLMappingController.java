@@ -4,15 +4,19 @@ package com.urlmapping.controller;
 import com.urlmapping.dtos.CreateURLDTO;
 import com.urlmapping.dtos.ErrorResponseDTO;
 import com.urlmapping.dtos.ResponseURLDTO;
+import com.urlmapping.dtos.TopVisitedURLDTO;
 import com.urlmapping.exceptions.AliasAlreadyExistsException;
 import com.urlmapping.exceptions.ApplicationException;
 import com.urlmapping.exceptions.URLNotProvidedException;
 import com.urlmapping.services.UrlMappingService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/u")
@@ -33,6 +37,17 @@ public class URLMappingController {
         var response = service.createShortenURL(createDTO);
         return ResponseEntity.status(201).body(response);
     }
+
+    @GetMapping("/{alias}")
+    public ResponseEntity<?> retrieveURL(@PathVariable(name = "alias") String alias, HttpServletResponse response) throws ApplicationException,
+            IOException {
+        var originalURL = service.retrieveURL(alias);
+        response.sendRedirect(originalURL);
+        return ResponseEntity.status(301).build();
+    }
+
+
+
 
 }
 
