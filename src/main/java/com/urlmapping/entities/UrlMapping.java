@@ -23,6 +23,35 @@ public class UrlMapping {
     private Integer clicks;
 
 
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
+    public String getOriginalURL() {
+        return originalURL;
+    }
+
+    public void setOriginalURL(String originalURL) {
+        this.originalURL = originalURL;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public Integer getClicks() {
+        return clicks;
+    }
+
+    public void setClicks(Integer clicks) {
+        this.clicks = clicks;
+    }
 }
