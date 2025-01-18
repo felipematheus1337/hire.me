@@ -9,6 +9,7 @@ import com.urlmapping.exceptions.AliasAlreadyExistsException;
 import com.urlmapping.exceptions.URLNotProvidedException;
 import com.urlmapping.repository.UrlMappingRepository;
 import com.urlmapping.utils.URLUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class UrlMappingService {
         this.repository = urlMappingRepository;
     }
 
+    @Transactional
     public ResponseURLDTO createShortenURL(CreateURLDTO dto) {
         long startTime = System.currentTimeMillis();
         this.validateURLDTO(dto);
@@ -57,7 +59,7 @@ public class UrlMappingService {
         var customAlias = dto.customAlias();
 
         if (originalURL == null || originalURL.isEmpty() || originalURL.isBlank())
-            throw new URLNotProvidedException();
+            throw new URLNotProvidedException(customAlias);
 
         if (customAlias != null && (customAlias.isEmpty() || customAlias.isBlank()))
             return;
@@ -65,7 +67,7 @@ public class UrlMappingService {
         var urlWithSameAlias = this.repository.findByAlias(customAlias);
 
         if (urlWithSameAlias.isPresent())
-            throw new AliasAlreadyExistsException();
+            throw new AliasAlreadyExistsException(customAlias);
     }
 
 }

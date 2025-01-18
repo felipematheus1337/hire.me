@@ -3,7 +3,10 @@ package com.urlmapping.controller;
 
 import com.urlmapping.dtos.CreateURLDTO;
 import com.urlmapping.dtos.ErrorResponseDTO;
+import com.urlmapping.dtos.ResponseURLDTO;
+import com.urlmapping.exceptions.AliasAlreadyExistsException;
 import com.urlmapping.exceptions.ApplicationException;
+import com.urlmapping.exceptions.URLNotProvidedException;
 import com.urlmapping.services.UrlMappingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,19 +26,13 @@ public class URLMappingController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createShortenURL(@RequestParam("url") String url,
-                                              @RequestParam(value = "CUSTOM_ALIAS", required = false) String customAlias) {
+    public ResponseEntity<ResponseURLDTO> createShortenURL(@RequestParam("url") String url,
+                                                           @RequestParam(value = "CUSTOM_ALIAS",
+                                                                   required = false) String customAlias) throws ApplicationException {
         var createDTO = new CreateURLDTO(url, customAlias);
-        try {
-            var response = service.createShortenURL(createDTO);
-            return ResponseEntity.status(201).body(response);
-
-        } catch(ApplicationException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponseDTO(
-                  customAlias,
-                    e.getCode(),
-                    e.getDescription()
-            ));
-        }
+        var response = service.createShortenURL(createDTO);
+        return ResponseEntity.status(201).body(response);
     }
+
 }
+
