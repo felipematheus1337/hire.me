@@ -16,16 +16,29 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleAliasAlreadyExists(AliasAlreadyExistsException ex) {
         var errorResponse = new ErrorResponseDTO(
                 ex.getCustomAlias(),
-                "ALIAS_ALREADY_EXISTS",
-                ex.getMessage()
+                ex.getCode(),
+                ex.getDescription()
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
     @ExceptionHandler(URLNotProvidedException.class)
     public ResponseEntity<ErrorResponseDTO> handleURLNotProvided(URLNotProvidedException ex) {
-        var errorResponse = new ErrorResponseDTO(ex.getCustomAlias(), "URL_NOT_PROVIDED", ex.getMessage());
+        var errorResponse = new ErrorResponseDTO(
+                ex.getCustomAlias(),
+                ex.getCode(),
+                ex.getDescription());
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(ShortenedURLNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAliasNotExists(ShortenedURLNotFoundException ex) {
+        var errorResponse = new ErrorResponseDTO(
+                ex.getCustomAlias(),
+                ex.getCode(),
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)

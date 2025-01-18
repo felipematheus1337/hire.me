@@ -6,6 +6,7 @@ import com.urlmapping.dtos.ResponseURLDTO;
 import com.urlmapping.dtos.Statistics;
 import com.urlmapping.entities.UrlMapping;
 import com.urlmapping.exceptions.AliasAlreadyExistsException;
+import com.urlmapping.exceptions.ShortenedURLNotFoundException;
 import com.urlmapping.exceptions.URLNotProvidedException;
 import com.urlmapping.repository.UrlMappingRepository;
 import com.urlmapping.utils.URLUtils;
@@ -51,6 +52,25 @@ public class UrlMappingService {
                 dto.url(),
                 new Statistics(timeTaken)
         );
+    }
+
+    public String retrieveURL(String alias) {
+        var urlEntity = this.getURLEntityByAlias(alias);
+
+        urlEntity.setClicks(urlEntity.getClicks() + 1);
+
+        this.repository.save(urlEntity);
+
+        return urlEntity.getOriginalURL();
+    }
+
+    public UrlMapping getURLEntityByAlias(String alias) {
+        var urlEntity = this.repository.findByAlias(alias);
+
+        if (urlEntity.isEmpty())
+            throw new ShortenedURLNotFoundException(alias);
+
+        return urlEntity.get();
     }
 
     public void validateURLDTO(CreateURLDTO dto) {
