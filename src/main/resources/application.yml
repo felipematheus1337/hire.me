@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: url-mapping
+  profiles:
+    active: prod
+base-url-service: http://localhost:8080/u/

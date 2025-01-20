@@ -11,6 +11,7 @@ import com.urlmapping.exceptions.URLNotProvidedException;
 import com.urlmapping.services.UrlMappingService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequestMapping("/u")
 public class URLMappingController {
 
+    @Autowired
     private final UrlMappingService service;
 
     public URLMappingController(UrlMappingService urlMappingService) {
