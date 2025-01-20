@@ -2,28 +2,19 @@ package com.urlmapping.controller;
 
 
 import com.urlmapping.dtos.CreateURLDTO;
-import com.urlmapping.dtos.ErrorResponseDTO;
 import com.urlmapping.dtos.ResponseURLDTO;
-import com.urlmapping.dtos.TopVisitedURLDTO;
-import com.urlmapping.exceptions.AliasAlreadyExistsException;
 import com.urlmapping.exceptions.ApplicationException;
-import com.urlmapping.exceptions.URLNotProvidedException;
 import com.urlmapping.services.UrlMappingService;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.coyote.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/u")
 public class URLMappingController {
 
-    @Autowired
     private final UrlMappingService service;
 
     public URLMappingController(UrlMappingService urlMappingService) {
