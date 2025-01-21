@@ -3,6 +3,7 @@ package com.urlmapping.controller;
 
 import com.urlmapping.dtos.CreateURLDTO;
 import com.urlmapping.dtos.ResponseURLDTO;
+import com.urlmapping.dtos.TopVisitedURLDTO;
 import com.urlmapping.exceptions.ApplicationException;
 import com.urlmapping.services.UrlMappingService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/u")
@@ -37,6 +39,11 @@ public class URLMappingController {
         var originalURL = service.retrieveURL(alias);
         response.sendRedirect(originalURL);
         return ResponseEntity.status(301).build();
+    }
+
+    @GetMapping("/top")
+    public ResponseEntity<List<TopVisitedURLDTO>> findTopTen() {
+        return ResponseEntity.status(200).body(service.getTopTen());
     }
 
 

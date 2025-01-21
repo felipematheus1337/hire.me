@@ -4,6 +4,7 @@ package com.urlmapping.services;
 import com.urlmapping.dtos.CreateURLDTO;
 import com.urlmapping.dtos.ResponseURLDTO;
 import com.urlmapping.dtos.Statistics;
+import com.urlmapping.dtos.TopVisitedURLDTO;
 import com.urlmapping.entities.UrlMapping;
 import com.urlmapping.exceptions.AliasAlreadyExistsException;
 import com.urlmapping.exceptions.ShortenedURLNotFoundException;
@@ -13,6 +14,8 @@ import com.urlmapping.utils.URLUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UrlMappingService {
@@ -55,6 +58,14 @@ public class UrlMappingService {
         );
     }
 
+    public List<TopVisitedURLDTO> getTopTen() {
+        List<Object[]> results = repository.findTop10MostClickedGroupedByOriginalURL();
+        System.out.println(results);
+        return results.stream()
+                .map(r -> new TopVisitedURLDTO((String) r[0], ((Number) r[1]).intValue()))
+                .toList();
+    }
+
     public String retrieveURL(String alias) {
         var urlEntity = this.getURLEntityByAlias(alias);
 
@@ -65,7 +76,7 @@ public class UrlMappingService {
         return urlEntity.getOriginalURL();
     }
 
-    public UrlMapping getURLEntityByAlias(String alias) {
+    private UrlMapping getURLEntityByAlias(String alias) {
         var urlEntity = this.repository.findByAlias(alias);
 
         if (urlEntity.isEmpty())
@@ -74,7 +85,7 @@ public class UrlMappingService {
         return urlEntity.get();
     }
 
-    public void validateURLDTO(CreateURLDTO dto) {
+    private void validateURLDTO(CreateURLDTO dto) {
 
         var originalURL = dto.url();
         var customAlias = dto.customAlias();
